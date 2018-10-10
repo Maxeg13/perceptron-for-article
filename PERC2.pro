@@ -24,10 +24,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 
 
 SOURCES += main.cpp\
-        mainwindow.cpp
+        mainwindow.cpp \
+    layer.cpp \
+    perceptron.cpp
 
 HEADERS  += mainwindow.h \
-    net.h \
-    perceptron.h
+    perceptron.h \
+    layer.h
 
 FORMS    += mainwindow.ui

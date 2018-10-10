@@ -1,35 +1,38 @@
 #include "mainwindow.h"
 #include "ui_mainwindow.h"
-#include "net.h"
+#include "perceptron.h"
 #include <QDebug>
 float x_in1[4]={1,0,1,1},
 x_in2[4]={0,1,0,0};
 float t1[4]={0,1,0.4,1};
 float t2[4]={1,0,0,1};
-net* setka;
+perceptron* perc;
 MainWindow::MainWindow(QWidget *parent) :
     QMainWindow(parent),
     ui(new Ui::MainWindow)
 {
     ui->setupUi(this);
-
-    setka=new net(4,4,4);
+    vector<int> constr;
+    constr.push_back(4);
+    constr.push_back(4);
+    constr.push_back(4);
+    perc=new perceptron(constr);
     for(int i=0;i<10000;i++)
     {
-    setka->learn1(x_in1,t1);
-    setka->learn1(x_in2,t2);
+        perc->learn1(x_in1,t1);
+        perc->learn1(x_in2,t2);
     }
 
 
 
-    setka->refresh(x_in2);
-//qDebug()<<setka->lr2->w[0][0];
-//    qDebug()<<((rand()%10)-5)/12.;
+    perc->refresh(x_in2);
+    //qDebug()<<setka->lr2->w[0][0];
+    //    qDebug()<<((rand()%10)-5)/12.;
 
-    qDebug()<<setka->lr2->n[2].state;
-    setka->refresh(x_in1);
+    qDebug()<<perc->lr[2]->n[2].state;
+    perc->refresh(x_in1);
 
-    qDebug()<<setka->lr2->n[2].state;
+    qDebug()<<perc->lr[2]->n[2].state;
 
 }
 
