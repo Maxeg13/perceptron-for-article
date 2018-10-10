@@ -1,6 +1,9 @@
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
+#define thr 3.75
+#define f_k 1//100./47.;
+
 
 class neuron
 {
@@ -27,6 +30,25 @@ public:
     float actDer(float x)
     {
         return 1;
+    }
+};
+
+class scaled_neuron:public neuron
+{
+public:
+    float act(float x)
+    {
+        if(x<thr)
+            return(0);
+        else
+            return(x-thr)*f_k*2;
+    }
+    float actDer(float x)
+    {
+        if(x<thr)
+            return 0;
+        else
+            return f_k*2;
     }
 };
 

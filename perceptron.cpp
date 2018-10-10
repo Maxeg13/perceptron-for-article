@@ -1,6 +1,6 @@
 #include "perceptron.h"
 
-perceptron::perceptron(vector<int>& constr)
+perceptron::perceptron(vector<int>& constr, int mode)
 {
 
 
@@ -15,16 +15,26 @@ perceptron::perceptron(vector<int>& constr)
     lrh=NULL;
     for( i=0;i<(N-1);i++)
     {
-        lr[i]=new layer(constr[i],1,lrh);
+        lr[i]=new layer(constr[i],mode,lrh);
         lrh=lr[i];
     }
-    lr[N-1]=new layer(constr[N-1],1,lrh);
+    lr[N-1]=new layer(constr[N-1],mode,lrh);
 
     out=new float*[constr[N-1]];
     for( i=0;i<constr[N-1];i++)
         out[i]=&(lr[N-1]->n[i].state);
 
 
+}
+
+void perceptron::rescaleW(float s)
+{
+    for( i=1;i<N;i++)
+    {
+        for(int j=0;j<lr[i]->size_inp;j++)
+            for(int k=0;k<lr[i]->size;k++)
+        lr[i]->w[j][k]*=s;
+    }
 }
 
 int perceptron::getMaxInd()

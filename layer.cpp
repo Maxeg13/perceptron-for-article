@@ -2,23 +2,23 @@
 #include <math.h>
 #include <iostream>
 
-int thr=3.75;
+
 float neuron::act(float x)
 {
-    //    return(1/(1+exp(-x)));
+//        return(1/(1+exp(-x)));
 
     if(x<thr)
         return(0);
     else
-        return(x-thr);
+        return(x-thr)*f_k;
 }
 float neuron::actDer(float x)
 {
-    //    return(act(x)*(1-act(x)));
+//    return(act(x)*(1-act(x)));
     if(x<thr)
         return 0;
     else
-        return 1;
+        return f_k;
 }
 
 neuron::neuron()
@@ -43,7 +43,7 @@ layer::layer(int N,int mode,layer* l=NULL)
     case 1:
         n=new neuron[N]();break;
     case 2:
-        n=new integrNeuron[N]();
+        n=new scaled_neuron[N]();
     }
     if(l!=NULL)
     {
