@@ -32,8 +32,11 @@ layer::layer()
 {
 
 }
+
+
 layer::layer(int N,int mode,layer* l=NULL)
 {
+    x_shift=1;
     two_sub_inLayers=0;
     a=0.5;
     inLayer=l;
@@ -57,6 +60,8 @@ layer::layer(int N,int mode,layer* l=NULL)
 
 void layer::reset_w()
 {
+//    rand();
+//    rand();
     for(int i=0;i<(size_inp+1);i++)
         for(int j=0;j<size;j++)
             w[i][j]=((rand()%50)-25)/25.;
@@ -79,7 +84,7 @@ void layer::refresh()//not for first
         for(int i=0;i<size_inp;i++)
             n[j].state_in+=(inLayer->n[i].state*w[i][j]);
 
-        n[j].state_in+=w[size_inp][j];
+        n[j].state_in+=w[size_inp][j]*x_shift;
         n[j].state=n[j].act(n[j].state_in);
     }
 }

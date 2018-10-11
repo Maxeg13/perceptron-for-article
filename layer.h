@@ -1,7 +1,7 @@
 #ifndef PERCEPTRON_H
 #define PERCEPTRON_H
 
-#define thr 3.75
+#define thr 0
 #define f_k 1//100./47.;
 
 
@@ -66,6 +66,7 @@ public:
     float a;
     layer();
     layer(int N,int mode,layer*);
+    float x_shift;
 
     void reset_w();
     void set(float* x);

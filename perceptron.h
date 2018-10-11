@@ -12,7 +12,7 @@ public:
     int N;
 
     int inp_size;
-    int out_size;
+    int out_size;    
     float **out;
     float *tg_ptr;
     float *inp_ptr;
@@ -21,6 +21,7 @@ public:
     perceptron(vector<int>& constr, int);
     int getMaxInd();
     void rescaleW(float);
+    void rescaleXShifts(float);
     float reset_w();
     float** refresh(float* x);
     float** refresh(vector<float>& x);
@@ -29,6 +30,7 @@ public:
     void learn1(float* x,float* t);
     void learn1(float* x,float t);
     void learnFunc();
+    void showStates();
 private:
     int i;
 };

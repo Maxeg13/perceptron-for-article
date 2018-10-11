@@ -1,10 +1,12 @@
 #include "perceptron.h"
-
+#include "iostream"
+using namespace std;
 perceptron::perceptron(vector<int>& constr, int mode)
 {
 
 
     N=constr.size();
+
     inp_size=constr[0];
     out_size=constr[N-1];
 
@@ -27,13 +29,19 @@ perceptron::perceptron(vector<int>& constr, int mode)
 
 }
 
+void perceptron::rescaleXShifts(float s)
+{
+    for(int i=0;i<N;i++)
+        lr[i]->x_shift*=s;
+}
+
 void perceptron::rescaleW(float s)
 {
     for( i=1;i<N;i++)
     {
         for(int j=0;j<lr[i]->size_inp;j++)
             for(int k=0;k<lr[i]->size;k++)
-        lr[i]->w[j][k]*=s;
+                lr[i]->w[j][k]*=s;
     }
 }
 
@@ -50,6 +58,17 @@ int perceptron::getMaxInd()
         }
     }
     return  ind;
+}
+
+void perceptron::showStates()
+{
+    cout<<"\n";
+    for ( i=0;i<(N);i++)
+    {
+        cout<<"\n";
+        for(int j=0;j<lr[i]->size;j++)
+            cout<<lr[i]->n[j].state<<"  ";
+    }
 }
 
 float perceptron::reset_w()
