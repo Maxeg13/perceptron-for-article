@@ -5,6 +5,9 @@
 #-------------------------------------------------
 
 QT       += core gui
+INCLUDEPATH += C:/QWT/include
+LIBS += -LC:/QWT/lib -lqwt
+CONFIG   += qwt
 
 greaterThan(QT_MAJOR_VERSION, 4): QT += widgets
 
@@ -26,10 +29,12 @@ DEFINES += QT_DEPRECATED_WARNINGS
 SOURCES += main.cpp\
         mainwindow.cpp \
     layer.cpp \
-    perceptron.cpp
+    perceptron.cpp \
+    drawing.cpp
 
 HEADERS  += mainwindow.h \
     perceptron.h \
-    layer.h
+    layer.h \
+    drawing.h
 
 FORMS    += mainwindow.ui

@@ -64,7 +64,7 @@ void layer::reset_w()
 //    rand();
     for(int i=0;i<(size_inp+1);i++)
         for(int j=0;j<size;j++)
-            w[i][j]=((rand()%50)-25)/25.;
+            w[i][j]=((rand()%50)-25)/50.;
 
     // for f=_/
     for(int j=0;j<size;j++)
