@@ -74,6 +74,7 @@ public:
     void reset_w();
     void set(float* x);
     void refresh();
+    void dynRefresh();
     void getErr(float* t);
     void pushErr();
     void refreshW();

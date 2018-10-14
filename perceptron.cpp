@@ -62,12 +62,14 @@ int perceptron::getMaxInd()
 
 void perceptron::showStates()
 {
-    cout<<"\n";
+    cout<<"\n\n";
+    cout<<"inconvenient arrangement of x_shifts (right)";
     for ( i=0;i<(N);i++)
     {
         cout<<"\n";
         for(int j=0;j<lr[i]->size;j++)
             cout<<lr[i]->n[j].state<<"  ";
+        cout<<lr[i]->x_shift;
     }
 }
 

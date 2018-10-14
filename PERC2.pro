@@ -30,11 +30,13 @@ SOURCES += main.cpp\
         mainwindow.cpp \
     layer.cpp \
     perceptron.cpp \
-    drawing.cpp
+    drawing.cpp \
+    neuronizh.cpp
 
 HEADERS  += mainwindow.h \
     perceptron.h \
     layer.h \
-    drawing.h
+    drawing.h \
+    neuronizh.h
 
-FORMS    += mainwindow.ui
+FORMS    +=

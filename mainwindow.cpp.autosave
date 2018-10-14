@@ -189,11 +189,20 @@ void MainWindow::frame()
 //        neur.input_sum=4;
         for(int j=0;j<constr[0];j++)
         perc->lr[0]->izh[j].setInp(perc->lr[0]->n[j]/2);
+        
+        for(int j=1;j<constr.size()-1;j++)
+            perc->lr[j]->izh[constr[j]].setInp(perc->lr[j]->x_shift);
 
         for(int j=1;j<constr.size();j++)//layers
-            for(int k=0;k<constr[j-1];k++)
+            for(int k=1;k<constr[j];k++)//outer neurons
             {
-                float sum=0;
+                float sum=perc->lr[j]->izh[constr[j]].E_m*perc->lr[j];
+                for(l=0;l<constr[j-1];l++)
+                {
+                    sum+=lr[j]->izh[constr[j]].E_m;
+                }
+                
+                sum+=perc->lr[j-1]->izh[j].E_m;
 
             }
 

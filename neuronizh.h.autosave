@@ -1,0 +1,35 @@
+#ifndef NEURONIZH_H
+#define NEURONIZH_H
+#include <stdio.h>
+#define TAU_SYN 22
+#define REVERSE_TAU 1./TAU_SYN
+//#include "net.h"
+using namespace std;
+class CNet;
+//class neuronIzh;
+
+
+class neuronIzh
+{
+public:
+
+    float a;
+    float b;
+    float c;
+    float d;
+    float step;
+    float E_m;
+    float U_e;
+    float dE_m;
+    float dU_e;
+    float input_sum;
+    float post_sum;
+    CNet* net;
+
+    neuronIzh();
+//    neuronIzh();
+    void setInp(float);
+
+};
+
+#endif // NEURONIZH_H
