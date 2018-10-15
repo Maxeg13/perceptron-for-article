@@ -4,7 +4,7 @@
 
 
 #define thr 0
-#define f_k 0.022//100./47.;
+#define f_k 0.0022//100./47.;
 
 
 class neuron
@@ -74,6 +74,7 @@ public:
     void reset_w();
     void set(float* x);
     void refresh();
+    void dynRefresh();
     void getErr(float* t);
     void pushErr();
     void refreshW();

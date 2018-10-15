@@ -30,7 +30,7 @@ neuronIzh::neuronIzh()
 //}
 
 
-void neuronIzh::setInp(float x)
+void neuronIzh::compute(float x)
 {
     post_sum=post_sum*(1-REVERSE_TAU)+REVERSE_TAU*x;
     dE_m = 0.04*E_m*E_m + 5*E_m + 140 - U_e + (post_sum);

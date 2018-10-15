@@ -18,6 +18,7 @@ public:
     float c;
     float d;
     float step;
+    float fired;
     float E_m;
     float U_e;
     float dE_m;
@@ -28,7 +29,7 @@ public:
 
     neuronIzh();
 //    neuronIzh();
-    void oneStep(float);
+    void compute(float);
 
 };
 

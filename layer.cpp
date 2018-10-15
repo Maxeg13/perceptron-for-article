@@ -5,7 +5,7 @@
 
 float neuron::act(float x)
 {
-//        return(1/(1+exp(-x)));
+    //        return(1/(1+exp(-x)));
 
     if(x<thr)
         return(0);
@@ -14,7 +14,7 @@ float neuron::act(float x)
 }
 float neuron::actDer(float x)
 {
-//    return(act(x)*(1-act(x)));
+    //    return(act(x)*(1-act(x)));
     if(x<thr)
         return 0;
     else
@@ -38,13 +38,13 @@ layer::layer(int N,int mode,layer* l=NULL)
 {
     x_shift=1;
     two_sub_inLayers=0;
-    a=5;
+    a=50;
     inLayer=l;
     size=N;
     izh=new neuronIzh[N+1];
     switch(mode)
     {
-    case 1:        
+    case 1:
         n=new neuron[N]();break;
     case 2:
         n=new scaled_neuron[N]();
@@ -61,8 +61,8 @@ layer::layer(int N,int mode,layer* l=NULL)
 
 void layer::reset_w()
 {
-//    rand();
-//    rand();
+    //    rand();
+    //    rand();
     for(int i=0;i<(size_inp+1);i++)
         for(int j=0;j<size;j++)
             w[i][j]=((rand()%50)-25)/50.+0.7;
@@ -87,17 +87,19 @@ void layer::refresh()//not for first
 
         n[j].state_in+=w[size_inp][j]*x_shift;
         n[j].state=n[j].act(n[j].state_in);
-    }   
+    }
 }
 
 void layer::dynRefresh()
-{
-
+{    
     for(int i=0;i<size;i++)
     {
-        float sum=izh[size].E_m*w[size][i];
+        float sum=izh[size].fired*w[size_inp][i];
         for(int j=0;j<inLayer->size;j++)
-        sum+=inLayer->izh[j].E_m*w[j][i];
+            sum+=inLayer->izh[j].fired*w[j][i];
+//        sum*=10;
+
+        izh[i].compute(sum);
     }
 }
 

@@ -14,6 +14,7 @@ float max(float x,float y)
 
 neuronIzh::neuronIzh()
 {
+    fired=0;
     a=0.02;
     b=0.2;
     c=-65;
@@ -21,6 +22,7 @@ neuronIzh::neuronIzh()
 
     E_m=-75;
     U_e=13;
+    post_sum=0;
 }
 
 //neuronIzh::neuronIzh(int _ID, neuronType _type, bool _is_excitatory,CNet* _net)
@@ -30,7 +32,7 @@ neuronIzh::neuronIzh()
 //}
 
 
-void neuronIzh::oneStep(float x)
+void neuronIzh::compute(float x)
 {
     post_sum=post_sum*(1-REVERSE_TAU)+REVERSE_TAU*x;
     dE_m = 0.04*E_m*E_m + 5*E_m + 140 - U_e + (post_sum);
@@ -42,7 +44,10 @@ void neuronIzh::oneStep(float x)
 
     if(E_m >= 30) // spike here! value 30 mV - by Izhikevich
     {
+        fired=1;
         E_m = c;
         U_e = U_e + d;
     }
+    else
+        fired=0;
 }
