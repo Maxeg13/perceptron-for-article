@@ -3,7 +3,7 @@
 using namespace std;
 perceptron::perceptron(vector<int>& constr, int mode)
 {
-
+    f_k=0.022;
 
     N=constr.size();
 
@@ -12,21 +12,20 @@ perceptron::perceptron(vector<int>& constr, int mode)
 
     inp_ptr=new float[constr[0]];
     tg_ptr=new float[constr[N-1]];
-
-    lr=new layer*[N];
+//    cout<<1;
+    lr=new layer*[N]();
     lrh=NULL;
-    for( i=0;i<(N-1);i++)
+    for( i=0;i<(N);i++)
     {
-        lr[i]=new layer(constr[i],mode,lrh);
+        lr[i]=new layer();
+        *lr[i]=layer(constr[i],mode,this,lrh);
         lrh=lr[i];
     }
-    lr[N-1]=new layer(constr[N-1],mode,lrh);
-
+//    *lr[N-1]=layer(constr[N-1],mode,this,lrh);
+//    cout<<2;
     out=new float*[constr[N-1]];
     for( i=0;i<constr[N-1];i++)
         out[i]=&(lr[N-1]->n[i].state);
-
-
 }
 
 void perceptron::rescaleXShifts(float s)

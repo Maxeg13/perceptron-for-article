@@ -25,12 +25,6 @@ neuronIzh::neuronIzh()
     post_sum=0;
 }
 
-//neuronIzh::neuronIzh(int _ID, neuronType _type, bool _is_excitatory,CNet* _net)
-//{
-//    E_m=-75;
-//    U_e=13;
-//}
-
 
 void neuronIzh::compute(float x)
 {
@@ -39,8 +33,6 @@ void neuronIzh::compute(float x)
     E_m +=  dE_m;
     dU_e = a*(b*E_m - U_e);
     U_e +=   dU_e;
-
-//    input_from_neurons*=net->exp_psc_exc;
 
     if(E_m >= 30) // spike here! value 30 mV - by Izhikevich
     {

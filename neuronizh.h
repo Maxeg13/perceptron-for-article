@@ -3,9 +3,10 @@
 #include <stdio.h>
 #define TAU_SYN 22
 #define REVERSE_TAU 1./TAU_SYN
-//#include "net.h"
+
+
 using namespace std;
-class CNet;
+
 //class neuronIzh;
 
 
@@ -25,10 +26,10 @@ public:
     float dU_e;
     float input_sum;
     float post_sum;
-    CNet* net;
+
+
 
     neuronIzh();
-//    neuronIzh();
     void compute(float);
 
 };

@@ -13,11 +13,11 @@ myCurve *test_curve;
 vector<float> test_data;
 QLineEdit *lr_line, *n_line, *x_inp_line;
 
-float x_in1[]={0,1,0,1},
-x_in2[]={1,0,1,0},
-x_in3[]={1,1,1,1};
+float x_in[3][4]={{0,1,0,1},
+{1,0,1,0},
+{1,1,1,1}};
 
-float t1[]={0.1},
+float t1[]={0.7},
 t2[]={0.8},
 t3[]={1};
 int bufShowSize=1000;
@@ -45,6 +45,8 @@ MainWindow::MainWindow(QWidget *parent) :
     GL->addWidget(d_plot,1,1);
     GL->addWidget(lr_line,2,1);
     GL->addWidget(n_line,3,1);
+    GL->addWidget(x_inp_line,4,1);
+
     this->setCentralWidget(centralWidget1);
 
     test_curve=new myCurve(bufShowSize, test_data, d_plot,"spikes",Qt::black,Qt::black,ind_c);
@@ -72,53 +74,100 @@ MainWindow::MainWindow(QWidget *parent) :
 
     for(int i=0;i<10000;i++)
     {
-        perc->learn1(x_in1,t1);
-        perc->learn1(x_in2,t2);
-        perc->learn1(x_in3,t3);
+        perc->learn1(x_in[0],t1);
+        perc->learn1(x_in[1],t2);
+        perc->learn1(x_in[2],t3);
     }
 
 
-    perc->refresh(x_in1);
+    perc->refresh(x_in[0]);
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
-    perc->refresh(x_in2);
+    perc->refresh(x_in[1]);
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
-    perc->refresh(x_in3);
+    perc->refresh(x_in[2]);
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
 
-    //rescale f
-    //    for(int i=0;i<perc->N;i++)
-    //            perc->lr[i]->n=new scaled_neuron[perc->lr[i]->size]();
-    //    rescale(x_in1,constr[0],2);
-    //    rescale(x_in2,constr[0],2);
-    //    rescale(x_in3,constr[0],2);
-    //    rescale(t1,1,2);
-    //    rescale(t2,1,2);
-    //    rescale(t3,1,2);
-    //    perc->rescaleW(0.5);
 
+//    rescale act_func //!!!!!!!!!!bad code snippet!!!!!!!!!!!!
+//    float resc=0.1;
+//        for(int i=0;i<perc->N;i++)
+//                perc->lr[i]->n=new scaled_neuron[perc->lr[i]->size]();
+//        rescale(x_in[0],constr[0],1/resc);
+//        rescale(x_in[1],constr[0],1/resc);
+//        rescale(x_in[2],constr[0],1/resc);
+//        rescale(t1,1,2);
+//        rescale(t2,1,2);
+//        rescale(t3,1,2);
+//        perc->rescaleW(0.5);
 
+    //rescale act_func
+    perc->f_k=0.0022;
+    perc->rescaleW(16);
 
-    perc->refresh(x_in1);
+    perc->refresh(x_in[1]);
     perc->showStates();
 
-    int resc=60;
+    float resc=60;
     perc->rescaleXShifts(resc);
 
-    rescale(x_in1,constr[0],resc);
-    perc->refresh(x_in1);
+    rescale(x_in[0],constr[0],resc);
+    perc->refresh(x_in[0]);
     perc->showStates();
 
-    rescale(x_in2,constr[0],resc);
-    perc->refresh(x_in2);
+    rescale(x_in[1],constr[0],resc);
+    perc->refresh(x_in[1]);
     perc->showStates();
 
-    rescale(x_in3,constr[0],resc);
-    perc->refresh(x_in3);
+    rescale(x_in[2],constr[0],resc);
+    perc->refresh(x_in[2]);
     perc->showStates();
 
     test_curve->signalDrawing(1);
 }
 
+void MainWindow::frame()
+{
+
+
+    static int k=0;
+
+    perc->refresh(x_in[x_inp_line->text().toInt()]);
+
+    for(int i=0;i<42;i++)
+    {
+        //        neur.input_sum=4;
+
+        for(int j=0;j<constr[0];j++)
+            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state/2);
+
+//        qDebug()<<perc->lr[0]->izh[0].post_sum;
+
+        for(int l=1;l<constr.size();l++)
+        {
+            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift/2);
+        }
+
+        for(int l=1;l<constr.size();l++)
+            perc->lr[l]->dynRefresh();
+
+
+
+//                k++;
+        ind_c=(ind_c+1)%test_data.size();
+
+        int l_i=lr_line->text().toInt();
+
+        test_data[ind_c]=perc->lr[l_i]->izh[n_line->text().toInt()].E_m;
+    }
+//    qDebug()<<perc->lr[0]->izh[0].post_sum;
+    test_curve->signalDrawing(1);
+}
+
+void rescale(float* a,int N,float s)
+{
+    for(int i=0;i<N;i++)
+        a[i]*=s;
+}
 
 void MainWindow::drawingInit(QwtPlot* d_plot, QString title)
 {
@@ -180,46 +229,7 @@ void MainWindow::drawingInit(QwtPlot* d_plot, QString title)
 
 }
 
-void MainWindow::frame()
-{
 
-
-    static int k=0;
-
-    perc->refresh(x_inp_line->text().toInt());
-
-    for(int i=0;i<42;i++)
-    {
-        //        neur.input_sum=4;
-        for(int j=0;j<constr[0];j++)
-            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state/2);
-
-        for(int l=1;l<constr.size();l++)
-        {
-            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift/2);
-        }
-
-        for(int l=1;l<constr.size();l++)
-            perc->lr[l]->dynRefresh();
-
-
-
-        //        k++;
-        ind_c=(ind_c+1)%test_data.size();
-
-        int l_i=lr_line->text().toInt();
-
-        test_data[ind_c]=perc->lr[l_i]->izh[n_line->text().toInt()].E_m;
-    }
-//    qDebug()<<perc->lr[0]->izh[0].post_sum;
-    test_curve->signalDrawing(1);
-}
-
-void rescale(float* a,int N,float s)
-{
-    for(int i=0;i<N;i++)
-        a[i]*=s;
-}
 
 
 
