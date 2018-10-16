@@ -14,6 +14,7 @@ float max(float x,float y)
 
 neuronIzh::neuronIzh()
 {
+    freq_cnt=0;
     fired=0;
     a=0.02;
     b=0.2;
@@ -42,4 +43,15 @@ void neuronIzh::compute(float x)
     }
     else
         fired=0;
+
+
+    freq_cnt++;
+    if(freq_cnt<2000)
+        freq+=fired;
+    else
+    {
+        freq_show=freq/2;
+        freq=0;
+        freq_cnt=9;
+    }
 }

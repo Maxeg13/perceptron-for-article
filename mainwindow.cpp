@@ -7,17 +7,20 @@
 #include <QGridLayout>
 #include <QTimer>
 #include <QLineEdit>
+#include <QPushButton>
 
 QTimer* timer;
 myCurve *test_curve;
 vector<float> test_data;
 QLineEdit *lr_line, *n_line, *x_inp_line;
+QPushButton *freq_btn;
 
 float x_in[3][4]={{0,1,0,1},
 {1,0,1,0},
 {1,1,1,1}};
 
-float t1[]={0.7},
+float
+t1[]={0.5},
 t2[]={0.8},
 t3[]={1};
 int bufShowSize=1000;
@@ -35,6 +38,9 @@ MainWindow::MainWindow(QWidget *parent) :
     lr_line=new QLineEdit(QString::number(QString(constr.size()-1).toInt()));/**/
     x_inp_line=new QLineEdit(QString::number(QString("0").toInt()));
 
+    freq_btn=new QPushButton("check freq");
+    connect(freq_btn, SIGNAL(released()),this,SLOT(showFreq()));
+
     d_plot = new QwtPlot();
     drawingInit(d_plot,QString("test"));
     d_plot->setAxisScale(QwtPlot::yLeft,-100,50);
@@ -46,6 +52,7 @@ MainWindow::MainWindow(QWidget *parent) :
     GL->addWidget(lr_line,2,1);
     GL->addWidget(n_line,3,1);
     GL->addWidget(x_inp_line,4,1);
+    GL->addWidget(freq_btn,5,1);
 
     this->setCentralWidget(centralWidget1);
 
@@ -57,8 +64,8 @@ MainWindow::MainWindow(QWidget *parent) :
     connect(timer,SIGNAL(timeout()),this,SLOT(frame()));
 
     constr.push_back(4);
-    constr.push_back(6);
-    //    constr.push_back(3);
+    constr.push_back(6);//4 6 1
+//    constr.push_back(2);
     constr.push_back(1);
 
     rand();
@@ -107,7 +114,7 @@ MainWindow::MainWindow(QWidget *parent) :
     perc->refresh(x_in[1]);
     perc->showStates();
 
-    float resc=60;
+    float resc=45;
     perc->rescaleXShifts(resc);
 
     rescale(x_in[0],constr[0],resc);
@@ -167,6 +174,12 @@ void rescale(float* a,int N,float s)
 {
     for(int i=0;i<N;i++)
         a[i]*=s;
+}
+
+void MainWindow::showFreq()
+{
+    int l_i=lr_line->text().toInt();
+    qDebug()<<perc->lr[l_i]->izh[n_line->text().toInt()].freq_show;
 }
 
 void MainWindow::drawingInit(QwtPlot* d_plot, QString title)

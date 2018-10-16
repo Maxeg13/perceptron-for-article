@@ -15,6 +15,7 @@ public:
     ~MainWindow();
 public slots:
     void frame();
+    void showFreq();
 
 };
 

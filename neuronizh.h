@@ -26,7 +26,9 @@ public:
     float dU_e;
     float input_sum;
     float post_sum;
-
+    float freq;
+    float freq_show;
+    int freq_cnt;
 
 
     neuronIzh();
