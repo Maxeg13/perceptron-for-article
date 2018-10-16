@@ -3,7 +3,7 @@
 using namespace std;
 perceptron::perceptron(vector<int>& constr, int mode)
 {
-    f_k=0.022;
+    f_k=0.0022;
 
     N=constr.size();
 

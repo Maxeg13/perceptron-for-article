@@ -15,14 +15,16 @@ vector<float> test_data;
 QLineEdit *lr_line, *n_line, *x_inp_line;
 QPushButton *freq_btn;
 
-float x_in[3][4]={{0,1,0,1},
+float x_in[4][4]={{0,0.5,0,1},
 {1,0,1,0},
-{1,1,1,1}};
+{1,1,1,1},
+{1,1,0,0}};
 
 float
-t1[]={0.5},
-t2[]={0.8},
-t3[]={1};
+t1[]={0},
+t2[]={0},//0.8
+t3[]={1},
+t4[]={1};
 int bufShowSize=1000;
 int ind_c=0;
 
@@ -38,7 +40,7 @@ MainWindow::MainWindow(QWidget *parent) :
     lr_line=new QLineEdit(QString::number(QString(constr.size()-1).toInt()));/**/
     x_inp_line=new QLineEdit(QString::number(QString("0").toInt()));
 
-    freq_btn=new QPushButton("check freq");
+    freq_btn=new QPushButton("info");
     connect(freq_btn, SIGNAL(released()),this,SLOT(showFreq()));
 
     d_plot = new QwtPlot();
@@ -63,14 +65,16 @@ MainWindow::MainWindow(QWidget *parent) :
     timer->start(42);
     connect(timer,SIGNAL(timeout()),this,SLOT(frame()));
 
+    //4 6 1
+    //4 6 4 1
     constr.push_back(4);
-    constr.push_back(6);//4 6 1
+    constr.push_back(8);//4 6 1
 //    constr.push_back(2);
     constr.push_back(1);
 
     rand();
     rand();
-    //    rand();
+//        rand();
     //    rand();
     //    rand();
     //    rand();
@@ -84,6 +88,7 @@ MainWindow::MainWindow(QWidget *parent) :
         perc->learn1(x_in[0],t1);
         perc->learn1(x_in[1],t2);
         perc->learn1(x_in[2],t3);
+        perc->learn1(x_in[3],t4);
     }
 
 
@@ -92,6 +97,8 @@ MainWindow::MainWindow(QWidget *parent) :
     perc->refresh(x_in[1]);
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
     perc->refresh(x_in[2]);
+    qDebug()<<perc->lr[perc->N-1]->n[0].state;
+    perc->refresh(x_in[3]);
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
 
 
@@ -106,27 +113,32 @@ MainWindow::MainWindow(QWidget *parent) :
 //        rescale(t2,1,2);
 //        rescale(t3,1,2);
 //        perc->rescaleW(0.5);
-
-    //rescale act_func
-    perc->f_k=0.0022;
-    perc->rescaleW(16);
-
-    perc->refresh(x_in[1]);
-    perc->showStates();
-
-    float resc=45;
-    perc->rescaleXShifts(resc);
-
-    rescale(x_in[0],constr[0],resc);
     perc->refresh(x_in[0]);
     perc->showStates();
 
-    rescale(x_in[1],constr[0],resc);
+    //rescale act_func
+//    perc->f_k=0.0022;
+//    perc->rescaleW(11);
+
+
+
+    float resc_x=50;
+    perc->rescaleXShifts(resc_x);
+
+    rescale(x_in[0],constr[0],resc_x);
+    perc->refresh(x_in[0]);
+    perc->showStates();
+
+    rescale(x_in[1],constr[0],resc_x);
     perc->refresh(x_in[1]);
     perc->showStates();
 
-    rescale(x_in[2],constr[0],resc);
+    rescale(x_in[2],constr[0],resc_x);
     perc->refresh(x_in[2]);
+    perc->showStates();
+
+    rescale(x_in[3],constr[0],resc_x);
+    perc->refresh(x_in[3]);
     perc->showStates();
 
     test_curve->signalDrawing(1);
@@ -180,6 +192,10 @@ void MainWindow::showFreq()
 {
     int l_i=lr_line->text().toInt();
     qDebug()<<perc->lr[l_i]->izh[n_line->text().toInt()].freq_show;
+//    qDebug()<<"\n";
+////    for(int i=0;i<perc->lr[l_i]->size;i++)
+//        for(int j=0;j<perc->lr[l_i]->size_inp+1;j++)
+//            qDebug()<<perc->lr[l_i]->w[j][n_line->text().toInt()];
 }
 
 void MainWindow::drawingInit(QwtPlot* d_plot, QString title)

@@ -43,7 +43,7 @@ layer::layer(int N,int mode,perceptron* _perc,layer* l=NULL)
 {
     x_shift=1;
     two_sub_inLayers=0;
-    a=10;
+    a=5000;//5000
     inLayer=l;
     size=N;
     izh=new neuronIzh[N+1];
@@ -74,7 +74,7 @@ void layer::reset_w()
     //    rand();
     for(int i=0;i<(size_inp+1);i++)
         for(int j=0;j<size;j++)
-            w[i][j]=(((rand()%50)-25)/50.+0.2)*0.5;
+            w[i][j]=(((rand()%50)-25)/50.+0.2)*0.4;
 
     // for f=_/
     for(int j=0;j<size;j++)
