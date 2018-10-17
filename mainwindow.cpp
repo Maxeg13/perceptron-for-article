@@ -16,13 +16,13 @@ QLineEdit *lr_line, *n_line, *x_inp_line;
 QPushButton *freq_btn;
 
 float x_in[4][4]={{0,0.5,0,1},
-{1,0,1,0},
-{1,1,1,1},
-{1,1,0,0}};
+                  {1,0,1,0},
+                  {1,1,1,1},
+                  {1,1,0,0}};
 
 float
-t1[]={0},
-t2[]={0},//0.8
+t1[]={0.5},
+t2[]={0.5},//0.8
 t3[]={1},
 t4[]={1};
 int bufShowSize=1000;
@@ -30,6 +30,11 @@ int ind_c=0;
 
 QwtPlot* d_plot;
 vector<int> constr;
+
+float noise()
+{
+    return ((rand()%10)-4.5)*2;
+}
 
 void rescale(float*,int,float);
 perceptron* perc;
@@ -68,13 +73,13 @@ MainWindow::MainWindow(QWidget *parent) :
     //4 6 1
     //4 6 4 1
     constr.push_back(4);
-    constr.push_back(8);//4 6 1
-//    constr.push_back(2);
+    constr.push_back(15);//4 6 1
+    //    constr.push_back(2);
     constr.push_back(1);
 
     rand();
     rand();
-//        rand();
+    //        rand();
     //    rand();
     //    rand();
     //    rand();
@@ -102,27 +107,27 @@ MainWindow::MainWindow(QWidget *parent) :
     qDebug()<<perc->lr[perc->N-1]->n[0].state;
 
 
-//    rescale act_func //!!!!!!!!!!bad code snippet!!!!!!!!!!!!
-//    float resc=0.1;
-//        for(int i=0;i<perc->N;i++)
-//                perc->lr[i]->n=new scaled_neuron[perc->lr[i]->size]();
-//        rescale(x_in[0],constr[0],1/resc);
-//        rescale(x_in[1],constr[0],1/resc);
-//        rescale(x_in[2],constr[0],1/resc);
-//        rescale(t1,1,2);
-//        rescale(t2,1,2);
-//        rescale(t3,1,2);
-//        perc->rescaleW(0.5);
+    //    rescale act_func //!!!!!!!!!!bad code snippet!!!!!!!!!!!!
+    //    float resc=0.1;
+    //        for(int i=0;i<perc->N;i++)
+    //                perc->lr[i]->n=new scaled_neuron[perc->lr[i]->size]();
+    //        rescale(x_in[0],constr[0],1/resc);
+    //        rescale(x_in[1],constr[0],1/resc);
+    //        rescale(x_in[2],constr[0],1/resc);
+    //        rescale(t1,1,2);
+    //        rescale(t2,1,2);
+    //        rescale(t3,1,2);
+    //        perc->rescaleW(0.5);
     perc->refresh(x_in[0]);
     perc->showStates();
 
     //rescale act_func
-//    perc->f_k=0.0022;
-//    perc->rescaleW(11);
+    //    perc->f_k=0.0022;
+    //    perc->rescaleW(11);
 
 
 
-    float resc_x=50;
+    float resc_x=70;
     perc->rescaleXShifts(resc_x);
 
     rescale(x_in[0],constr[0],resc_x);
@@ -157,13 +162,13 @@ void MainWindow::frame()
         //        neur.input_sum=4;
 
         for(int j=0;j<constr[0];j++)
-            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state/2);
+            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state/2+noise());
 
-//        qDebug()<<perc->lr[0]->izh[0].post_sum;
+        //        qDebug()<<perc->lr[0]->izh[0].post_sum;
 
         for(int l=1;l<constr.size();l++)
         {
-            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift/2);
+            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift/2+noise());
         }
 
         for(int l=1;l<constr.size();l++)
@@ -171,14 +176,14 @@ void MainWindow::frame()
 
 
 
-//                k++;
+        //                k++;
         ind_c=(ind_c+1)%test_data.size();
 
         int l_i=lr_line->text().toInt();
 
         test_data[ind_c]=perc->lr[l_i]->izh[n_line->text().toInt()].E_m;
     }
-//    qDebug()<<perc->lr[0]->izh[0].post_sum;
+    //    qDebug()<<perc->lr[0]->izh[0].post_sum;
     test_curve->signalDrawing(1);
 }
 
@@ -192,10 +197,10 @@ void MainWindow::showFreq()
 {
     int l_i=lr_line->text().toInt();
     qDebug()<<perc->lr[l_i]->izh[n_line->text().toInt()].freq_show;
-//    qDebug()<<"\n";
-////    for(int i=0;i<perc->lr[l_i]->size;i++)
-//        for(int j=0;j<perc->lr[l_i]->size_inp+1;j++)
-//            qDebug()<<perc->lr[l_i]->w[j][n_line->text().toInt()];
+    //    qDebug()<<"\n";
+    ////    for(int i=0;i<perc->lr[l_i]->size;i++)
+    //        for(int j=0;j<perc->lr[l_i]->size_inp+1;j++)
+    //            qDebug()<<perc->lr[l_i]->w[j][n_line->text().toInt()];
 }
 
 void MainWindow::drawingInit(QwtPlot* d_plot, QString title)

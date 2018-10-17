@@ -46,11 +46,11 @@ void neuronIzh::compute(float x)
 
 
     freq_cnt++;
-    if(freq_cnt<2000)
+    if(freq_cnt<3000)
         freq+=fired;
     else
     {
-        freq_show=freq/2;
+        freq_show=freq/3;
         freq=0;
         freq_cnt=9;
     }
