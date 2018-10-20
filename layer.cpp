@@ -10,16 +10,19 @@ float neuron::act(float x)
 
     if(x<thr)
         return(0);
-    else
+//    else if(x<1000)
+//        return(0);
         return(x-thr)*perc->f_k;
 }
 float neuron::actDer(float x)
 {
     //    return(act(x)*(1-act(x)));
-    if(x<thr)
+    if(x<0)
         return 0;
-    else
+    else if(x<250000)
         return perc->f_k;
+    else
+        return 0;
 }
 
 neuron::neuron()
@@ -41,9 +44,9 @@ layer::layer()
 
 layer::layer(int N,int mode,perceptron* _perc,layer* l=NULL)
 {
-    x_shift=1;
+    x_shift=50;
     two_sub_inLayers=0;
-    a=5000;//5000
+    a=5;//5000
     inLayer=l;
     size=N;
     izh=new neuronIzh[N+1];
@@ -74,7 +77,7 @@ void layer::reset_w()
     //    rand();
     for(int i=0;i<(size_inp+1);i++)
         for(int j=0;j<size;j++)
-            w[i][j]=(((rand()%50)-25)/50.+0.2)*0.4;
+            w[i][j]=(((rand()%50))/50.-0.45)*5;
 
     // for f=_/
     for(int j=0;j<size;j++)

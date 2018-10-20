@@ -29,7 +29,7 @@ neuronIzh::neuronIzh()
 
 void neuronIzh::compute(float x)
 {
-    post_sum=post_sum*(1-REVERSE_TAU)+REVERSE_TAU*(x+((rand()%10)-4.5)/10.);
+    post_sum=post_sum*(1-REVERSE_TAU)+REVERSE_TAU*(x+((rand()%10)-4.5)/20.);
     dE_m = 0.04*E_m*E_m + 5*E_m + 140 - U_e + (post_sum);
     E_m +=  dE_m;
     dU_e = a*(b*E_m - U_e);

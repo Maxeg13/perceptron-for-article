@@ -1,7 +1,7 @@
 #ifndef NEURONIZH_H
 #define NEURONIZH_H
 #include <stdio.h>
-#define TAU_SYN 22
+#define TAU_SYN 30//22
 #define REVERSE_TAU 1./TAU_SYN
 
 
