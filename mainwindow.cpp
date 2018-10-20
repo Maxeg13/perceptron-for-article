@@ -33,7 +33,7 @@ vector<int> constr;
 
 float noise()
 {
-    return ((rand()%10)-4.5)*2;
+    return ((rand()%10)-4.5)/10.;
 }
 
 void rescale(float*,int,float);
@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //4 6 1
     //4 6 4 1
     constr.push_back(4);
-    constr.push_back(15);//15 // 8
+    constr.push_back(8);//15 // 8
     //    constr.push_back(2);
     constr.push_back(1);
 
@@ -157,18 +157,19 @@ void MainWindow::frame()
 
     perc->refresh(x_in[x_inp_line->text().toInt()]);
 
+    float k_stat=0.54;
     for(int i=0;i<42;i++)
     {
         //        neur.input_sum=4;
 
         for(int j=0;j<constr[0];j++)
-            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state/2+noise());
+            perc->lr[0]->izh[j].compute(perc->lr[0]->n[j].state*k_stat+noise());
 
         //        qDebug()<<perc->lr[0]->izh[0].post_sum;
 
         for(int l=1;l<constr.size();l++)
         {
-            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift/2+noise());
+            perc->lr[l]->izh[constr[l]].compute(perc->lr[l]->x_shift*k_stat+noise());
         }
 
         for(int l=1;l<constr.size();l++)
