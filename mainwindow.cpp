@@ -15,16 +15,16 @@ vector<float> test_data;
 QLineEdit *lr_line, *n_line, *x_inp_line;
 QPushButton *freq_btn;
 
-float x_in[4][4]={{0,0.5,0,1},
-                  {1,0,1,0},
-                  {1,1,1,1},
-                  {1,1,0,0}};
+float x_in[4][4]={{0,0,0,1},
+                  {1,0,0,1},
+                  {0,1,1,1},
+                  {1,1,1,1}};
 
 float
-t1[]={0.5},
-t2[]={0.5},//0.8
+t1[]={0.3},
+t2[]={1},//0.8
 t3[]={1},
-t4[]={1};
+t4[]={0.3};
 int bufShowSize=1000;
 int ind_c=0;
 
@@ -73,7 +73,7 @@ MainWindow::MainWindow(QWidget *parent) :
     //4 6 1
     //4 6 4 1
     constr.push_back(4);
-    constr.push_back(15);//4 6 1
+    constr.push_back(15);//15 // 8
     //    constr.push_back(2);
     constr.push_back(1);
 
@@ -127,7 +127,7 @@ MainWindow::MainWindow(QWidget *parent) :
 
 
 
-    float resc_x=70;
+    float resc_x=50;
     perc->rescaleXShifts(resc_x);
 
     rescale(x_in[0],constr[0],resc_x);
