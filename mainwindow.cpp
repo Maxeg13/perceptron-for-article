@@ -8,25 +8,30 @@
 #include <QTimer>
 #include <QLineEdit>
 #include <QPushButton>
+#include <QFile>
+
+QFile* file;
+QTextStream* out;
 
 QTimer* timer;
 myCurve *test_curve;
 vector<float> test_data;
 QLineEdit *lr_line, *n_line, *x_inp_line;
 QPushButton *freq_btn;
+bool write_on=0;
 float act=1;
 float zero_state=0.0;
 
 float x_in[][2]={{0,0},
-                  {0,1},
+                 {0,1},
                  {1,0},
-                  {1,1}};
+                 {1,1}};
 
 float
-t1[]={0.1},
+t1[]={0},
 t2[]={1},//0.8
 t3[]={1},
-t4[]={0.1};
+t4[]={0};
 int bufShowSize=1000;
 int ind_c=0;
 
@@ -53,6 +58,13 @@ MainWindow::MainWindow(QWidget *parent) :
     rand();
     rand();
     rand();
+
+    file=new QFile("out.txt");
+    if (!file->open(QIODevice::WriteOnly | QIODevice::Text))
+        return;
+
+    out=new QTextStream(file);
+
 
     lr_line=new QLineEdit(QString::number(constr.size()-1));/**/
     n_line=new QLineEdit(QString::number(QString("0").toInt()));
@@ -194,7 +206,20 @@ void MainWindow::frame()
 
         int l_i=lr_line->text().toInt();
 
-        test_data[ind_c]=perc->lr[l_i]->izh[n_line->text().toInt()].E_m;
+        float accum=0;
+        for(int l=0;l<constr.size();l++)
+        {
+            for(int i=0;i<constr[l];i++)
+                accum+=perc->lr[l]->izh[i].E_m;
+        }
+        test_data[ind_c]=/*(int)accum+1044;*/perc->lr[l_i]->izh[n_line->text().toInt()].E_m+67;
+
+        if(write_on)
+        {
+            out->flush();
+            *out << (int)test_data[ind_c] /*(int)accum+1044*/ << "\n";
+        }
+
     }
     //    qDebug()<<perc->lr[0]->izh[0].post_sum;
     test_curve->signalDrawing(1);
@@ -208,14 +233,15 @@ void rescale(float* a,int N,float s)
 
 void MainWindow::showFreq()
 {
+    write_on=!write_on;
     int l_i=lr_line->text().toInt();
-//    perc->lr[l_i]->izh[n_line->text().toInt()].compute(200);
+    //    perc->lr[l_i]->izh[n_line->text().toInt()].compute(200);
     qDebug()<<perc->lr[l_i]->izh[n_line->text().toInt()].freq_show;
     qDebug()<<perc->lr[l_i]->izh[n_line->text().toInt()].post_sum;
     //    qDebug()<<"\n";
     //    for(int i=0;i<perc->lr[l_i]->size;i++)
-//            for(int j=0;j<perc->lr[l_i-1]->size+1;j++)
-//                qDebug()<<perc->lr[l_i]->w[j][n_line->text().toInt()];
+    //            for(int j=0;j<perc->lr[l_i-1]->size+1;j++)
+    //                qDebug()<<perc->lr[l_i]->w[j][n_line->text().toInt()];
 }
 
 void MainWindow::drawingInit(QwtPlot* d_plot, QString title)
